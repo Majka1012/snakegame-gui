@@ -1,6 +1,4 @@
-RUN apt-get install -y python3.6
-RUN apt-get install -y pip
-    
+FROM python:3 AS builder
 
 WORKDIR /Deskop
 
