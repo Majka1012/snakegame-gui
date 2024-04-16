@@ -1,0 +1,6 @@
+FROM lab3_docker
+
+
+WORKDIR /Deskop/snakegame-gui
+
+CMD ["pytest", "-s", "-v"]
