@@ -1,6 +1,3 @@
-FROM lab3_docker
+FROM builder AS tester
 
-
-WORKDIR /Deskop/snakegame-gui
-
-CMD ["pytest", "-s", "-v"]
+RUN python3 -m pytest
