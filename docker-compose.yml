@@ -1,14 +1,15 @@
-version: '3'
+version: '3,8'
 
 services:
-  build:
+  builder:
     build:
-      context: .
+      context: ./
       dockerfile: Dockerfile
 
-  test:
+  tester:
     build:
-      context: .
-      dockerfile: Dockerfile2
+      context: ./test/
+      dockerfile: Dockerfile
     depends_on:
-      - build
+      - builder
+    command: pytest -s -v
