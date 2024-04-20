@@ -1,11 +1,9 @@
-FROM python:3 AS builder
+FROM python:3.10
 
-WORKDIR /Deskop
+WORKDIR ./app
 
 RUN git clone https://github.com/vyahello/snakegame-gui.git
 
 WORKDIR ./snakegame-gui
 
-RUN pip install -r requirements.txt 
-
-CMD ["pytest", "-s", "-v"]
+RUN pip install -r requirements.txt
