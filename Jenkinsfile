@@ -12,20 +12,7 @@ pipeline {
                 sh "docker image prune -af"
                 }
             }
-        stage('Clean up') {
-            steps {
-                echo "Cleaning up wrokspace..."
-                sh '''
-                docker image rm -f build_stage
-                docker image rm -f pysnake-test
-                docker image rm -f pysnake-deploy
-                
-                docker stop artifact
-                docker container rm artifact
-                '''
-            }
-        }
-
+        
         
         stage('Checkout') {
             steps {
