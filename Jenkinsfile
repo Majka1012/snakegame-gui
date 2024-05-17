@@ -20,13 +20,10 @@ pipeline {
             }
         }
 
-        stage('Build') {
+          stage('Build') {
             steps {
-                echo "Building..."
-                sh '''
-                cd currency-exchange-files-docker
-                docker build --no-cache -f Dockerfile.build -t build_stage .
-                '''
+                sh 'docker build -t pysnake .'
+                sh 'docker run --name pysnake pysnake'
                 sh 'docker logs pysnake > ./log/pysnake_log.txt'
             }
         }
@@ -39,11 +36,11 @@ pipeline {
         }
         stage('Deploy'){
             steps {
-                sh '''
-                cd currency-exchange-files-docker
-                docker build --no-cache -f Dockerfile.deploy -t pysnake-deploy .
-                docker run --rm deploy_stage
-                '''
+               
+               sh 'docker build --no-cache  -t -f pysnake-deploy ./deploy'
+           
+                sh 'docker run --rm deploy_stage
+            
                 sh 'docker logs pysnake-deploy > ./log/pysnake_test_log.txt'
             }
         }
