@@ -39,7 +39,7 @@ pipeline {
                
                sh 'docker build --no-cache  -t -f pysnake-deploy ./deploy'
            
-                sh 'docker run --rm deploy_stage
+                sh 'docker run --rm deploy_stage'
             
                 sh 'docker logs pysnake-deploy > ./log/pysnake_test_log.txt'
             }
