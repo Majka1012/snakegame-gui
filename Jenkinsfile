@@ -10,8 +10,8 @@ pipeline {
                 sh "mkdir -p log"
                 sh "docker container prune -f"
                 sh "docker image prune -af"
+                }
             }
-        }
         stage('Clean up') {
             steps {
                 echo "Cleaning up wrokspace..."
@@ -61,15 +61,6 @@ pipeline {
             }
         }
    
-    }
-
-    post {
-        success {
-            echo 'Budowa zakończona sukcesem!.'
-        }
-        failure {
-            echo 'Budowa nie powiodła się..'
-        }
     }
  }
 
