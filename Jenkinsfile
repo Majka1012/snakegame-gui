@@ -24,7 +24,7 @@ pipeline {
                 docker container rm artifact
                 '''
             }
-
+        }
 
         
         stage('Checkout') {
@@ -71,5 +71,5 @@ pipeline {
             echo 'Budowa nie powiodła się..'
         }
     }
-}
-}
+ }
+
