@@ -19,14 +19,26 @@ pipeline {
                 git 'https://github.com/Majka1012/snakegame-gui.git'
             }
         }
-
-          stage('Build') {
-            steps {
-                sh 'docker build -t pysnake .'
-                sh 'docker run --name pysnake pysnake'
-                sh 'docker logs pysnake > ./log/pysnake_log.txt'
+        stage('Build') 
+        {
+            steps 
+            {
+                script 
+                {
+                    try 
+                    {
+                        docker.build("pysnake", "-f Dockerfile .")
+                    } 
+                    catch (Exception e) 
+                    {
+                        currentBuild.result = 'FAILURE'
+                        error "Błąd podczas budowania obrazu Docker: ${e.message}"
+                    }
+                }
             }
         }
+
+        
         stage('Test') {
             steps {
                 sh 'docker build -t pysnake-test ./tests'
@@ -36,9 +48,28 @@ pipeline {
         }
         stage('Deploy'){
             steps {
-                sh 'docker build -t pysnake-deploy ./deploy'
-                sh 'docker run --name pysnake-deploy pysnake-deploy'
-                sh 'docker logs pysnake-deploy > ./log/pysnake_test_log.txt'
+               script 
+                {
+                    try 
+                    {
+                        sh "docker rm -f builder || true"
+                        docker.image("pysnake").run("-d --name pysnake -p 8080:8080")
+
+                        // smoke test
+                        sh "curl -s -o /dev/null -w '%{http_code}' http://localhost:8080/"
+
+                        sh "docker save pysnake -o pysnake.tar"
+                    
+                        // Archiwizacja artefaktu
+                        archiveArtifacts artifacts: "pysnake.tar", onlyIfSuccessful: true
+                        stash includes: "pysnake.tar", name: "pysnake"
+                    } 
+                    catch (Exception e) 
+                    {
+                        currentBuild.result = 'FAILURE'
+                        error "Błąd podczas deployu: ${e.message}"
+                    }
+                }
             }
         }
    
