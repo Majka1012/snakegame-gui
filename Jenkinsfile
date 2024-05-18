@@ -52,7 +52,7 @@ pipeline {
                 {
                     try 
                     {
-                        sh "docker rm -f builder || true"
+                        sh "docker rm -f pysnake || true"
                         docker.image("pysnake").run("-d --name pysnake -p 8080:8080")
 
                         // smoke test
