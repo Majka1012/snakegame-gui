@@ -46,7 +46,26 @@ pipeline {
                 sh 'docker logs pysnake-test > ./log/pysnake_deploy_log.txt'
             }
         }
-        stage('Deploy'){
+        stage('Test') 
+        {
+            steps 
+            {
+                script 
+                {
+                    try 
+                    {
+                        docker.build("tester", "-f Dockerfile ./tests")
+                    } 
+                    catch (Exception e) 
+                    {
+                        currentBuild.result = 'FAILURE'
+                        error "Błąd podczas testowania obrazu Docker: ${e.message}"
+                    }
+                }
+            }
+        }
+
+        stage('Deploy and Publish'){
             steps {
                script 
                 {
