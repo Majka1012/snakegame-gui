@@ -38,14 +38,7 @@ pipeline {
             }
         }
 
-        
-        stage('Test') {
-            steps {
-                sh 'docker build -t pysnake-test ./tests'
-                sh 'docker run --name pysnake-test pysnake-test'
-                sh 'docker logs pysnake-test > ./log/pysnake_deploy_log.txt'
-            }
-        }
+    
         stage('Test') 
         {
             steps 
