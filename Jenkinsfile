@@ -47,7 +47,9 @@ pipeline {
                 {
                     try 
                     {
-                        docker.build("tester", "-f Dockerfile ./tests")
+                        docker.build("pysnake-test", "-f Dockerfile ./tests")
+                        sh 'docker run --name pysnake-test pysnake-test'
+                       
                     } 
                     catch (Exception e) 
                     {
@@ -67,12 +69,13 @@ pipeline {
                         sh "docker rm -f pysnake || true"
                         docker.image("pysnake").run("-d --name pysnake -p 8080:8080")
 
-                        // smoke test
+                        
                         sh "curl -s -o /dev/null -w '%{http_code}' http://localhost:8080/"
 
                         sh "docker save pysnake -o pysnake.tar"
-                    
-                        // Archiwizacja artefaktu
+
+
+                        
                         archiveArtifacts artifacts: "pysnake.tar", onlyIfSuccessful: true
                         stash includes: "pysnake.tar", name: "pysnake"
                     } 
